@@ -1,0 +1,8 @@
+syntax off
+set dir=~/swp
+noremap Q @q
+set enc=utf-8
+set tabstop=4
+set nohlsearch
+set formatoptions-=cro
+set t_Co=0

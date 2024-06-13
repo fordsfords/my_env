@@ -1,0 +1,38 @@
+# ~/.bashrc: executed by bash(1) for non-login shells.
+# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
+# for examples
+
+export EDITOR="vi"
+
+# If not running interactively, don't do anything
+case $- in
+    *i*) ;;
+      *) return;;
+esac
+
+# append to the history file, don't overwrite it
+shopt -s histappend
+
+# don't put duplicate lines or lines starting with space in the history.
+HISTCONTROL=ignoreboth
+
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+HN=`hostname`;
+TY=`tty`
+HIST_FILENAME=${HN%%.*}.`basename $TY`
+HISTFILE=/home/sford/.bash_history_dir/$HIST_FILENAME
+#HISTFILE=/home/sford/.bash_history_dir/$$
+#PROMPT_COMMAND="history -a"
+HISTSIZE=1000
+HISTFILESIZE=2000
+history -w
+
+# check window size after each command
+shopt -s checkwinsize
+
+set -o vi
+
+alias ls="ls -F"
+alias open="explorer.exe"
+alias rot13="tr 'A-Za-z' 'N-ZA-Mn-za-m'"
+alias blunjo="ssh sford@blunjo"
