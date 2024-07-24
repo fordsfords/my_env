@@ -1,8 +1,11 @@
 syntax off
 set dir=~/swp
+" Q: execute macro named "q".
 noremap Q @q
+" gg: jump to file start, g?: rot13, G: move to end, '': restore cursor
+noremap <C-I> ggg?G''
 set enc=utf-8
 set tabstop=4
-set nohlsearch
-set formatoptions-=cro
-set t_Co=0
+set nohlsearch  " disable highlight search
+set formatoptions-=cro  " stop doing me favors with comments
+set t_Co=0 " zero colors
