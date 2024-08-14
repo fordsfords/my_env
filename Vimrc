@@ -5,7 +5,13 @@ noremap Q @q
 " gg: jump to file start, g?: rot13, G: move to end, '': restore cursor
 noremap <C-I> ggg?G''
 set enc=utf-8
-set tabstop=4
 set nohlsearch  " disable highlight search
 set formatoptions-=cro  " stop doing me favors with comments
 set t_Co=0 " zero colors
+set tabstop=4
+set noautoindent
+autocmd FileType python setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4 autoindent
+autocmd FileType sh setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2 autoindent
+autocmd FileType c setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4 autoindent
+command! Bld terminal ./bld.sh
+command! Tst terminal ./tst.sh
