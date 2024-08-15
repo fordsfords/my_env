@@ -14,6 +14,7 @@ autocmd FileType python setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4 
 autocmd FileType sh setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2 autoindent
 autocmd FileType c setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4 autoindent
 function! RunBuildScript(script_name)
+    " Anthropic's claude.ai wrote this function.
     " Save the current buffer
     update
     
