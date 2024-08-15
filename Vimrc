@@ -13,5 +13,35 @@ set noautoindent
 autocmd FileType python setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4 autoindent
 autocmd FileType sh setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2 autoindent
 autocmd FileType c setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4 autoindent
-command! Bld only | terminal ./bld.sh
-command! Tst only | terminal ./tst.sh
+function! RunBuildScript(script_name)
+    " Save the current buffer
+    update
+    
+    " Get the current buffer number and file path
+    let l:current_bufnr = bufnr('%')
+    let l:current_file = expand('%:p')
+    
+    " Run the specified build script and capture its output
+    let l:output = system(a:script_name)
+    
+    " Open a new split window and put the script output there
+    new
+    setlocal buftype=nofile bufhidden=hide noswapfile
+    call setline(1, split(l:output, '\n'))
+    
+    " Check if the original file has been modified
+    checktime
+    
+    " If the file has changed, prompt for reload
+    if getbufvar(l:current_bufnr, '&modified')
+        let l:choice = confirm("The file has been modified. Reload?", "&Yes\n&No", 1)
+        if l:choice == 1
+            execute 'buffer ' . l:current_bufnr
+            edit!
+        endif
+    endif
+endfunction
+
+" Define commands for specific scripts
+command! Bld call RunBuildScript('./bld.sh')
+command! Tst call RunBuildScript('./tst.sh')
