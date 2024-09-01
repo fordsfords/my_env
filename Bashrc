@@ -32,6 +32,7 @@ shopt -s checkwinsize
 
 set -o vi
 
+unalias -a
 alias ls="ls -F"
 alias open="explorer.exe"
 alias rot13="tr 'A-Za-z' 'N-ZA-Mn-za-m'"
