@@ -13,6 +13,17 @@ set noautoindent
 autocmd FileType python setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4 autoindent
 autocmd FileType sh setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2 autoindent
 autocmd FileType c setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4 autoindent
+
+function TabsOrSpaces()
+    " Modified from https://unix.stackexchange.com/a/63197
+    " If any lines in the buffer start with a tab, turn off "expandtab".
+    let numTabs=len(filter(getbufline(bufname("%"), 1, 250), 'v:val =~ "^\\t"'))
+
+    if numTabs > 0
+        setlocal noexpandtab
+    endif
+endfunction
+
 function! RunBuildScript(script_name)
     " Anthropic's claude.ai wrote this function.
     " Save the current buffer
@@ -50,3 +61,4 @@ endfunction
 " Define commands for specific scripts
 command! Bld call RunBuildScript('./bld.sh')
 command! Tst call RunBuildScript('./tst.sh')
+autocmd BufReadPost * call TabsOrSpaces()
