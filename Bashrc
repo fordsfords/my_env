@@ -1,39 +1,58 @@
-# ~/.bashrc: executed by bash(1) for non-login shells.
-# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
-# for examples
+# .bashrc
 
-export EDITOR="vi"
-
-# If not running interactively, don't do anything
-case $- in
-    *i*) ;;
-      *) return;;
-esac
-
-# append to the history file, don't overwrite it
-shopt -s histappend
-
-# don't put duplicate lines or lines starting with space in the history.
-HISTCONTROL=ignoreboth
-
-# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HN=`hostname`;
-TY=`tty`
-HIST_FILENAME=${HN%%.*}.`basename $TY`
-HISTFILE=/home/sford/.bash_history_dir/$HIST_FILENAME
-#HISTFILE=/home/sford/.bash_history_dir/$$
-#PROMPT_COMMAND="history -a"
-HISTSIZE=1000
-HISTFILESIZE=2000
-history -w
-
-# check window size after each command
-shopt -s checkwinsize
-
+# Enable the builtin vi(1) command line editor in sh(1),
 set -o vi
 
+if [ -f /etc/bashrc -a -z "$ETC_BASHRC_SOURCED" ]; then
+  ETC_BASHRC_SOURCED="Y"
+  . /etc/bashrc
+fi
+
+if [ -z "$MY_ENV_SET" ]; then
+  export MY_ENV_SET="Y"
+
+  ulimit -c unlimited
+
+  # export LC_ALL=C  # Heavy hammer; usually don't want:
+
+  export HST_LEVEL=0
+  export HST_HOST=$(hostname -s);
+  TTY=$(if tty >/dev/null 2>&1; then tty; else echo /dev/tty/x; fi)
+  export HST_TTY=$(basename $TTY)
+
+  export TERM=vt100
+
+  export EDITOR=vim
+  export PAGER=more
+
+  export P4PORT=perforce.informatica.com:1666
+  export P4USER=sford
+
+  export JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF8"
+
+  export PATH="/home/sford/perl5/bin${PATH:+:${PATH}}"
+  export PERL5LIB="/home/sford/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"
+  export PERL_LOCAL_LIB_ROOT="/home/sford/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"
+  export PERL_MB_OPT="--install_base \"/home/sford/perl5\""
+  export PERL_MM_OPT="INSTALL_BASE=/home/sford/perl5" export PATH="$HOME/bin:/usr/local/29West/common:/usr/local/29West/p4:$PATH"
+fi
+
+export HST_LEVEL=$(($HST_LEVEL + 1))
+export HISTFILE=$HOME/.bash_history_dir/${HST_HOST}_${HST_TTY}_${HST_LEVEL}
+export PROMPT_DIRTRIM=3
+export PS1="\u@\h:\w[$HST_LEVEL]\$ "
+
+# some useful aliases. First get rid of the standard ones.
 unalias -a
-alias ls="ls -F"
-alias open="explorer.exe"
+
+if ls --color=n not.found >/dev/null 2>&1;
+then alias ls='ls -F --color=n'
+else alias ls='ls -F'
+fi
+
+alias vi='vim'
+
 alias rot13="tr 'A-Za-z' 'N-ZA-Mn-za-m'"
-alias blunjo="ssh sford@blunjo"
+alias psux='ps ux >/home/sford/.psux.tmp; egrep pts /home/sford/.psux.tmp | egrep -v '\''sshd:|ps ux|labbox'\''; rm /home/sford/.psux.tmp'
+alias crepl="rlwrap $HOME/bin/crepl.sh"
+alias open="explorer.exe"

@@ -1,0 +1,7 @@
+# .profile - Bourne Shell startup script for login shells
+
+wsl_fixcore
+
+if [ -f ~/.bashrc ]; then
+  . ~/.bashrc
+fi
